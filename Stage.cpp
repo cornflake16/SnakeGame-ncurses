@@ -746,9 +746,9 @@ int Stage::findRoot(Something *gate)
             if (map[gate->y][gate->x - 1] == EMPTY)
                 return dir;
             else
-                dir = KEY_UP;
+                dir = UP;
         }
-        else if (dir == KEY_UP)
+        else if (dir == UP)
         {
             if (map[gate->y - 1][gate->x] == EMPTY)
                 return dir;

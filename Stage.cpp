@@ -123,15 +123,15 @@ string Stage::menu()
         }
         switch (getch())
         {
-        case UP:
-            focus--;
-            break;
-        case DOWN:
-            focus++;
-            break;
-        case ENTER:
-            menuLastFocus = focus;
-            return txt[abs(focus % 4 + 1)];
+            case UP:
+                focus--;
+                break;
+            case DOWN:
+                focus++;
+                break;
+            case ENTER:
+                menuLastFocus = focus;
+                return txt[abs(focus % 4 + 1)];
         }
     }
     return NULL;
@@ -142,7 +142,7 @@ void Stage::play()
     screenLock();
     setMap();
     int n;
-    timeoutMs = speedMs[speed - 1];
+    timeoutMs = SPEED_TIME[speed - 1];
     for (int i = 0; i < STAGE_NUM; i++)
     {
         msTime = n = 0;
@@ -156,33 +156,33 @@ void Stage::play()
         {
             switch (getch())
             {
-            case LEFT:
-                if (dir != RIGHT)
-                    dir = LEFT;
-                break;
-            case UP:
-                if (dir != DOWN)
-                    dir = UP;
-                break;
-            case RIGHT:
-                if (dir != LEFT)
-                    dir = RIGHT;
-                break;
-            case DOWN:
-                if (dir != UP)
-                    dir = DOWN;
-                break;
-            case PAUSE:
-                alert(y / 2 - 4, x / 2 - 34, "Press 'r' to play!", TRUE);
-                while (1)
-                {
-                    if (getch() == RESUME)
-                        break;
-                }
-                break;
-            case ESC:
-                endwin();
-                return;
+                case LEFT:
+                    if (dir != RIGHT)
+                        dir = LEFT;
+                    break;
+                case UP:
+                    if (dir != DOWN)
+                        dir = UP;
+                    break;
+                case RIGHT:
+                    if (dir != LEFT)
+                        dir = RIGHT;
+                    break;
+                case DOWN:
+                    if (dir != UP)
+                        dir = DOWN;
+                    break;
+                case PAUSE:
+                    alert(y / 2 - 4, x / 2 - 34, "Press 'r' to play!", TRUE);
+                    while (1)
+                    {
+                        if (getch() == RESUME)
+                            break;
+                    }
+                    break;
+                case ESC:
+                    endwin();
+                    return;
             }
             moveSnake();
             if (chkEnter) // After entering the Gate
@@ -195,7 +195,7 @@ void Stage::play()
                     chkEnter = FALSE;
                 }
             }
-            if (++msTime % (msDiv[speed - 1] * 5) == 0) // Item regeneration every 5 seconds
+            if (++msTime % (TIME_DIV_NUM[speed - 1] * 5) == 0) // Item regeneration every 5 seconds
             {
                 disappearItem();
                 appearItem();
@@ -254,27 +254,27 @@ void Stage::help()
         wrefresh(manual);
         wrefresh(description);
         wrefresh(scrollBar);
-    RE:
+        RE:
         switch (getch())
         {
-        case UP:
-            if (yScroll)
-                yScroll--;
-            else
-                goto RE;
-            if (ySize)
-                ySize++;
-            break;
-        case DOWN:
-            if (yScroll < desSizeY - scrollBarLen)
-                yScroll++;
-            else
-                goto RE;
-            if (ySize > desSizeY - txtLines && txtLines > desSizeY)
-                ySize--;
-            break;
-        case ESC:
-            return;
+            case UP:
+                if (yScroll)
+                    yScroll--;
+                else
+                    goto RE;
+                if (ySize)
+                    ySize++;
+                break;
+            case DOWN:
+                if (yScroll < desSizeY - scrollBarLen)
+                    yScroll++;
+                else
+                    goto RE;
+                if (ySize > desSizeY - txtLines && txtLines > desSizeY)
+                    ySize--;
+                break;
+            case ESC:
+                return;
         }
     }
 }
@@ -318,14 +318,14 @@ void Stage::option()
         speed = atoi(txt[abs(focus % 5)].c_str());
         switch (getch())
         {
-        case LEFT:
-            focus--;
-            break;
-        case RIGHT:
-            focus++;
-            break;
-        case ESC:
-            return;
+            case LEFT:
+                focus--;
+                break;
+            case RIGHT:
+                focus++;
+                break;
+            case ESC:
+                return;
         }
     }
 }
@@ -459,7 +459,7 @@ void Stage::drawMap()
 
     info = newwin(4, 15, y / 2 - (MAP_ROW / 2 + 4), x / 2 + MAP_COL / 2 - 47.4);
     mvwprintw(info, 0, 1, "[ STAGE %d/%d ]", level + 1, STAGE_NUM);
-    mvwprintw(info, 2, 3, "< %02d:%02d >", msTime / (msDiv[speed - 1] * 60), (msTime / msDiv[speed - 1]) % 60);
+    mvwprintw(info, 2, 3, "< %02d:%02d >", msTime / (TIME_DIV_NUM[speed - 1] * 60), (msTime / TIME_DIV_NUM[speed - 1]) % 60);
 
     refresh();
     wrefresh(info);
@@ -506,26 +506,26 @@ void Stage::appearGate()
             x = rand() % (MAP_COL - (i?3:2)) + (i?2:1);
             switch (n)
             {
-            case 0: // upper side
-                y = 0;
-                break;
-            case 1: // left side
-                x = 0;
-                break;
-            case 2: // right side
-                x = COL_END;
-                break;
-            case 3: // lower side
-                y = ROW_END;
-                break;
-            case 4: // middle
-                while (1)
-                {
-                    x = rand() % 30 + 10;
-                    y = rand() % 15 + 5;
-                    if (map[y][x] == WALL)
-                        break;
-                }
+                case 0: // upper side
+                    y = 0;
+                    break;
+                case 1: // left side
+                    x = 0;
+                    break;
+                case 2: // right side
+                    x = COL_END;
+                    break;
+                case 3: // lower side
+                    y = ROW_END;
+                    break;
+                case 4: // middle
+                    while (1)
+                    {
+                        x = rand() % 30 + 10;
+                        y = rand() % 15 + 5;
+                        if (map[y][x] == WALL)
+                            break;
+                    }
             }
             if (map[y][x] == WALL)
             {

@@ -1,4 +1,5 @@
 #include "Stage.h"
+
 /************************************************
     @file Stage.cpp
     @author 윤낙원(Nakwon Yun), 김현민(Hyunmin Kim) 
@@ -6,7 +7,7 @@
 ************************************************/
 Stage::Stage()
 {
-    srand((unsigned)time(0));
+    srand((unsigned) time(0));
     initscr();
     keypad(stdscr, TRUE);
     cbreak();
@@ -102,7 +103,9 @@ string Stage::menu()
     while (1)
     {
         if (!focus)
+        {
             focus = 300;
+        }
         txt[1] = "PLAY";
         txt[2] = "HELP";
         txt[3] = "OPTION";
@@ -119,7 +122,9 @@ string Stage::menu()
                 attroff(COLOR_PAIR(11));
             }
             else
+            {
                 mvprintw(y / 2 + i, x / 2 - (txt[i].length() / 2), txt[i].c_str());
+            }
         }
         switch (getch())
         {
@@ -158,26 +163,36 @@ void Stage::play()
             {
                 case LEFT:
                     if (dir != RIGHT)
+                    {
                         dir = LEFT;
+                    }
                     break;
                 case UP:
                     if (dir != DOWN)
+                    {
                         dir = UP;
+                    }
                     break;
                 case RIGHT:
                     if (dir != LEFT)
+                    {
                         dir = RIGHT;
+                    }
                     break;
                 case DOWN:
                     if (dir != UP)
+                    {
                         dir = DOWN;
+                    }
                     break;
                 case PAUSE:
                     alert(y / 2 - 4, x / 2 - 34, "Press 'r' to play!", TRUE);
                     while (1)
                     {
                         if (getch() == RESUME)
+                        {
                             break;
+                        }
                     }
                     break;
                 case ESC:
@@ -200,8 +215,10 @@ void Stage::play()
                 disappearItem();
                 appearItem();
             }
-            if (stat[0] < 3) // If the Snake length less than 3, game over
+            if (stat[0] < 3)
+            { // If the Snake length less than 3, game over
                 gameOver();
+            }
             if (isMissionClear())
             {
                 alert(y / 2 - 4, x / 2 - 27, "Stage Clear!", FALSE);
@@ -237,12 +254,18 @@ void Stage::help()
         mvwprintw(description, 0 + ySize,
                   sizeX / 2 - menuTitle.length() / 2 - 3, "%s", menuTitle.c_str());
         for (int i = 0; i < sizeof(menuTxt) / sizeof(menuTxt[0]); i++)
-            mvwprintw(description, 2 + (i * 2) + ySize, sizeX / 2 - menuTxt[2].length() / 2 - 3, "%s", menuTxt[i].c_str());
+        {
+            mvwprintw(description, 2 + (i * 2) + ySize, sizeX / 2 - menuTxt[2].length() / 2 - 3, "%s",
+                      menuTxt[i].c_str());
+        }
 
         mvwprintw(description, 11 + ySize,
                   sizeX / 2 - shorTitle.length() / 2 - 3, "%s", shorTitle.c_str());
         for (int i = 0; i < sizeof(shorTxt) / sizeof(shorTxt[0]); i++)
-            mvwprintw(description, 13 + (i * 2) + ySize, sizeX / 2 - shorTxt[6].length() / 2 - 3, "%s", shorTxt[i].c_str());
+        {
+            mvwprintw(description, 13 + (i * 2) + ySize, sizeX / 2 - shorTxt[6].length() / 2 - 3, "%s",
+                      shorTxt[i].c_str());
+        }
 
         if (txtLines >= desSizeY)
         {
@@ -259,19 +282,31 @@ void Stage::help()
         {
             case UP:
                 if (yScroll)
+                {
                     yScroll--;
+                }
                 else
+                {
                     goto RE;
+                }
                 if (ySize)
+                {
                     ySize++;
+                }
                 break;
             case DOWN:
                 if (yScroll < desSizeY - scrollBarLen)
+                {
                     yScroll++;
+                }
                 else
+                {
                     goto RE;
+                }
                 if (ySize > desSizeY - txtLines && txtLines > desSizeY)
+                {
                     ySize--;
+                }
                 break;
             case ESC:
                 return;
@@ -293,9 +328,13 @@ void Stage::option()
     while (1)
     {
         if (!focus)
+        {
             focus = 500;
+        }
         for (int i = 0; i < sizeof(txt) / sizeof(txt[0]); i++)
+        {
             txt[i] = to_string(i + 1);
+        }
 
         attron(COLOR_PAIR(10));
         mvprintw(y / 2 - 2, x / 2 - optTitle.length() / 2, optTitle.c_str());
@@ -309,7 +348,9 @@ void Stage::option()
                 attroff(COLOR_PAIR(12));
             }
             else
+            {
                 mvprintw(y / 2, x / 2 - sizeof(txt) / sizeof(txt[0]) + i * 3 - 1, txt[i].c_str());
+            }
         }
 
         mvprintw(y / 2 + 2, x / 2 - optTxt[1].length() / 2 + 1, optTxt[1].c_str());
@@ -350,9 +391,13 @@ void Stage::setMap()
             for (k = 0; k < MAP_COL; k++)
             {
                 if (!j || !k || j == ROW_END || k == COL_END)
+                {
                     stage[i][j][k] = WALL;
+                }
                 else
+                {
                     stage[i][j][k] = EMPTY;
+                }
             }
         }
         stage[i][0][0] = IMMUNE_WALL;
@@ -362,48 +407,72 @@ void Stage::setMap()
         if (i == 1)
         {
             for (int z = 10; z < 40; z++)
+            {
                 stage[i][7][z] = WALL;
+            }
             for (int z = 10; z < 40; z++)
+            {
                 stage[i][MAP_ROW - 7][z] = WALL;
+            }
         }
         if (i == 2)
         {
             for (int z = 5; z < 20; z++)
+            {
                 stage[i][z][MAP_COL - 15] = WALL;
+            }
             for (int z = 5; z < 20; z++)
+            {
                 stage[i][z][15] = WALL;
+            }
         }
         if (i == 3)
         {
             for (int z = 10; z < 40; z++)
             {
                 if (z > 22 && z < 27)
+                {
                     continue;
+                }
                 stage[i][7][z] = WALL;
             }
             for (int z = 10; z < 40; z++)
             {
                 if (z > 22 && z < 27)
+                {
                     continue;
+                }
                 stage[i][MAP_ROW - 7][z] = WALL;
             }
             for (int z = 5; z < 20; z++)
             {
                 if (z > 10 && z < 14)
+                {
                     continue;
+                }
                 if (stage[i][z][MAP_COL - 15] == WALL)
+                {
                     stage[i][z][MAP_COL - 15] = IMMUNE_WALL;
+                }
                 else
+                {
                     stage[i][z][MAP_COL - 15] = WALL;
+                }
             }
             for (int z = 5; z < 20; z++)
             {
                 if (z > 10 && z < 14)
+                {
                     continue;
+                }
                 if (stage[i][z][15] == WALL)
+                {
                     stage[i][z][15] = IMMUNE_WALL;
+                }
                 else
+                {
                     stage[i][z][15] = WALL;
+                }
             }
         }
     }
@@ -413,11 +482,15 @@ void Stage::copyMap(int nStage)
 {
     map = new int *[MAP_ROW];
     for (int i = 0; i < MAP_COL; i++)
+    {
         map[i] = new int[MAP_COL];
+    }
     for (int i = 0; i < MAP_ROW; i++)
     {
         for (int j = 0; j < MAP_COL; j++)
+        {
             map[i][j] = stage[nStage][i][j];
+        }
     }
 }
 
@@ -459,7 +532,8 @@ void Stage::drawMap()
 
     info = newwin(4, 15, y / 2 - (MAP_ROW / 2 + 4), x / 2 + MAP_COL / 2 - 47.4);
     mvwprintw(info, 0, 1, "[ STAGE %d/%d ]", level + 1, STAGE_NUM);
-    mvwprintw(info, 2, 3, "< %02d:%02d >", msTime / (TIME_DIV_NUM[speed - 1] * 60), (msTime / TIME_DIV_NUM[speed - 1]) % 60);
+    mvwprintw(info, 2, 3, "< %02d:%02d >", msTime / (TIME_DIV_NUM[speed - 1] * 60),
+              (msTime / TIME_DIV_NUM[speed - 1]) % 60);
 
     refresh();
     wrefresh(info);
@@ -475,9 +549,13 @@ void Stage::appearItem()
     {
         int itemType = rand() % 2 + GROWTH_ITEM;
         if (chkMission[2] == 'v')
+        {
             itemType = GROWTH_ITEM;
+        }
         else if (stat[0] >= SNAKE_MAX_LENGTH)
+        {
             itemType = POISON_ITEM;
+        }
         while (1)
         {
             int y = rand() % (MAP_ROW - 2) + 1;
@@ -502,8 +580,8 @@ void Stage::appearGate()
         while (1)
         {
             n = rand() % (!level ? 4 : 5);
-            y = rand() % (MAP_ROW - (i?3:2)) + (i?2:1);
-            x = rand() % (MAP_COL - (i?3:2)) + (i?2:1);
+            y = rand() % (MAP_ROW - (i ? 3 : 2)) + (i ? 2 : 1);
+            x = rand() % (MAP_COL - (i ? 3 : 2)) + (i ? 2 : 1);
             switch (n)
             {
                 case 0: // upper side
@@ -524,7 +602,9 @@ void Stage::appearGate()
                         x = rand() % 30 + 10;
                         y = rand() % 15 + 5;
                         if (map[y][x] == WALL)
+                        {
                             break;
+                        }
                     }
             }
             if (map[y][x] == WALL)
@@ -535,28 +615,36 @@ void Stage::appearGate()
             }
         }
         if (i == 0)
+        {
             gate1 = new Something(y, x, GATE);
+        }
         if (i == 1)
+        {
             gate2 = new Something(y, x, GATE);
+        }
     }
 }
 
 void Stage::disappearItem()
 {
-    for (auto item : itemPos)
+    for (auto item: itemPos)
     {
         if (map[item.first][item.second] == GROWTH_ITEM || map[item.first][item.second] == POISON_ITEM)
+        {
             map[item.first][item.second] = EMPTY;
+        }
     }
     itemPos.clear();
 }
 
 void Stage::disappearGate()
 {
-    for (auto gate : gatePos)
+    for (auto gate: gatePos)
     {
-        if(map[gate.first][gate.second] == GATE)
+        if (map[gate.first][gate.second] == GATE)
+        {
             map[gate.first][gate.second] = WALL;
+        }
     }
     gatePos.clear();
 }
@@ -581,7 +669,9 @@ void Stage::makeSnake()
 void Stage::moveSnake()
 {
     if (map[Bam->y][Bam->x] != WALL)
+    {
         map[Bam->y][Bam->x] = EMPTY;
+    }
     Something *q = Bam;
     Something *p = q->link;
     while (p->link != NULL)
@@ -744,30 +834,46 @@ int Stage::findRoot(Something *gate)
         if (dir == LEFT)
         {
             if (map[gate->y][gate->x - 1] == EMPTY)
+            {
                 return dir;
+            }
             else
+            {
                 dir = UP;
+            }
         }
         else if (dir == UP)
         {
             if (map[gate->y - 1][gate->x] == EMPTY)
+            {
                 return dir;
+            }
             else
+            {
                 dir = RIGHT;
+            }
         }
         else if (dir == RIGHT)
         {
             if (map[gate->y][gate->x + 1] == EMPTY)
+            {
                 return dir;
+            }
             else
+            {
                 dir = DOWN;
+            }
         }
         else if (dir == DOWN)
         {
             if (map[gate->y + 1][gate->x] == EMPTY)
+            {
                 return dir;
+            }
             else
+            {
                 dir = LEFT;
+            }
         }
     }
     return dir;
@@ -778,20 +884,32 @@ void Stage::eatItem(int item)
     if (item == GROWTH_ITEM)
     {
         if (stat[0] == 10)
+        {
             return;
+        }
         Something *p = new Something(Bam->y, Bam->x, SNAKE_BODY);
         if (Bam->x - Bam->link->x == 1)
+        {
             p->x++;
+        }
         else if (Bam->y - Bam->link->y == 1)
+        {
             p->y++;
+        }
         else if (Bam->x - Bam->link->x == -1)
+        {
             p->x--;
+        }
         else if (Bam->y - Bam->link->y == -1)
+        {
             p->y--;
+        }
         p->link = Bam;
         Bam = p;
         if (map[Bam->y][Bam->x] != WALL)
+        {
             map[Bam->y][Bam->x] = Bam->who;
+        }
         stat[0]++;
         stat[1]++;
     }
@@ -829,10 +947,14 @@ bool Stage::isMissionClear()
             count++;
         }
         else if (!i)
+        {
             chkMission[i] = ' ';
+        }
     }
     if (count == 4)
+    {
         return TRUE;
+    }
     return FALSE;
 }
 
@@ -850,5 +972,7 @@ void Stage::alert(int posY, int posX, const string msg, bool stopFlag)
     mvwprintw(alert, 3, msg.length() / 2, msg.c_str());
     wrefresh(alert);
     if (!stopFlag)
+    {
         usleep(1750000);
+    }
 }

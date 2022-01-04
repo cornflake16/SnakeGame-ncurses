@@ -112,7 +112,7 @@ private:
               MAP_COL = 50,
               ROW_END = MAP_ROW - 1,
               COL_END = MAP_COL - 1;
-    const string itemIndex = "  X0O+- ";
+    const string ITEM_CHAR_LIST = "  X0O+- ";
 
     // variables about stage & map
     int ***stage, **map;
@@ -122,8 +122,9 @@ private:
         menuLastFocus, optLastFocus,
         level, speed, tcount,
         timeoutMs, msTime;
-    const int speedMs[5] = {500, 250, 200, 100, 50},
-              msDiv[5] = {2, 4, 5, 10, 20};
+    //time unit = milliseconds
+    const int SPEED_TIME[5] = {500, 250, 200, 100, 50},
+              TIME_DIV_NUM[5] = {2, 4, 5, 10, 20};
 
     // variables about manual & option 
     string manualTitle, menuTitle, shorTitle;

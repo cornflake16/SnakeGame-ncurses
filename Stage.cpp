@@ -504,7 +504,7 @@ void Stage::drawMap()
         {
             int index = map[i][j];
             wattron(game, COLOR_PAIR(index));
-            mvwaddch(game, i, j, itemIndex[index]);
+            mvwaddch(game, i, j, ITEM_CHAR_LIST[index]);
             wattroff(game, COLOR_PAIR(index));
         }
         printw("\n");
